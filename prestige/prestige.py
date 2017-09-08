@@ -1,12 +1,11 @@
-#!/usr/bin/env python3.4
-
 import boto3
 import sys
 import json
 import zipfile
 import os
 from botocore.exceptions import ClientError
-import config
+import prestige.config as config
+from prestige.cli import ARGS as args
 
 img_types = config.IMG_TYPES
 
@@ -14,7 +13,7 @@ s3 = boto3.resource('s3')
 client = boto3.client('s3')
 
 def upload_files():
-  bucket = 'mm-img-bucket-test'
+  bucket = args.bucket
   current_dir = os.curdir
   walker = os.walk(current_dir)
   length = len(current_dir)
@@ -36,13 +35,23 @@ def upload_files():
               for obj in upload:
                 print("Uploading file %s" % shortened_img_path)
             except ClientError:
-              print "balls"
+              print("balls")
 
 def get_urls():
   print("Getting urls")
 
+def photo_optim():
+  print("Im optimizing photos!")
+
 def main():
-  upload_files()
+  if args.upload:
+    if args.optimize:
+      photo_optim()
+      upload_files()
+      get_urls()
+    else:
+      upload_files()
+      get_urls()
 
 if __name__ == "__main__":
   main()
