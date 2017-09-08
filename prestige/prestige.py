@@ -28,13 +28,17 @@ def upload_files():
           for images in shortened_img_path:
             try:
               upload = client.put_object(
+                        ACL='private',
                         Body=open(absolute_img_path, 'rb').read(),
                         Bucket=bucket,
                         Key=shortened_img_path
                       )
               for obj in upload:
-                print("Uploading file %s..." % shortened_img_path)
+                print("Uploading file %s" % shortened_img_path)
             except ClientError:
               print "balls"
+
+def get_urls():
+  print("Getting urls")
 
 upload_files()
