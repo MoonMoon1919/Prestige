@@ -15,6 +15,8 @@ img_types = config.IMG_TYPES
 
 s3 = boto3.resource('s3')
 client = boto3.client('s3')
+my_session = boto3.session.Session()
+region = my_session.region_name
 
 def upload_files():
   bucket = args.bucket
@@ -72,8 +74,8 @@ def check_upload():
 
     for obj in objects:
       current_objs.append(obj['Key'])  
-  except ClientError:
-    print(error.response)
+  except ClientError as error:
+    print(error.response['Error']['Message'])
 
   for obj in to_upload:
    if obj in current_objs:
@@ -82,8 +84,24 @@ def check_upload():
   else:
     return False
 
-def get_urls():
-  print("Getting urls")
+def get_urls():  
+  print('Getting urls')
+  print('\n')
+  bucket = args.bucket
+  current_dir = os.curdir
+  walker = os.walk(current_dir)
+  length = len(current_dir)
+
+  images = []
+
+  for root, folders, files in walker:
+    for file_name in files:
+      if file_name != 0:
+        shortened_img_path = os.path.join(root[length:], file_name)
+        images.append(shortened_img_path)
+        
+  for item in images:
+    print("'%s' url: https://s3-%s.amazonaws.com/%s/%s" % (item, region, bucket, item.replace(" ", "+")))
 
 def photo_optim():
   print("Im optimizing photos!")
