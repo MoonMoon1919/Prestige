@@ -41,4 +41,8 @@ def upload_files():
 def get_urls():
   print("Getting urls")
 
-upload_files()
+def main():
+  upload_files()
+
+if __name__ == "__main__":
+  main()
