@@ -1,0 +1,1 @@
+IMG_TYPES = ['.jpg', '.jpeg', '.png']
