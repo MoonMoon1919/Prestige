@@ -11,8 +11,9 @@ import config
 img_types = config.IMG_TYPES
 
 s3 = boto3.resource('s3')
+client = boto3.client('s3')
 
-def get_files():
+def upload_files():
   bucket = 'mm-img-bucket-test'
   current_dir = os.curdir
   walker = os.walk(current_dir)
@@ -26,8 +27,14 @@ def get_files():
         if shortened_img_path != 0:
           for images in shortened_img_path:
             try:
-              upload = s3.Bucket(bucket).upload_file(absolute_img_path, shortened_img_path)
+              upload = client.put_object(
+                        Body=open(absolute_img_path, 'rb').read(),
+                        Bucket=bucket,
+                        Key=shortened_img_path
+                      )
+              for obj in upload:
+                print("Uploading file %s..." % shortened_img_path)
             except ClientError:
               print "balls"
 
-get_files()
+upload_files()
