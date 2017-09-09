@@ -17,4 +17,7 @@ parser.add_argument(
   action='version', 
   version="0.1", 
   )
+parser.add_argument(
+  '-a', '--acl',
+  )
 ARGS = parser.parse_args()

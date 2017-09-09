@@ -13,6 +13,7 @@ import prestige.config as config
 from prestige.cli import ARGS as args
 
 img_types = config.IMG_TYPES
+ACCEPTED_ACLS = config.ACCEPTED_ACLS
 
 s3 = boto3.resource('s3')
 client = boto3.client('s3')
@@ -66,23 +67,27 @@ def upload_files():
   current_dir = os.curdir
   walker = os.walk(current_dir)
   length = len(current_dir)
+
+  if args.acl in ACCEPTED_ACLS:
   
-  for root, folders, files in walker:
-    for file_name in files:
-      absolute_img_path = os.path.join(root, file_name)
-      shortened_img_path = os.path.join(root[length:], file_name)
-      if any(ext in shortened_img_path.lower() for ext in img_types):
-        if shortened_img_path != 0:
-          try:
-            upload = client.put_object(
-                      ACL='public-read',
-                      Body=open(absolute_img_path, 'rb').read(),
-                      Bucket=bucket,
-                      Key=shortened_img_path
-                    )
-            print("Uploading file %s" % shortened_img_path)
-          except ClientError as error:
-            print(error.response)
+    for root, folders, files in walker:
+      for file_name in files:
+        absolute_img_path = os.path.join(root, file_name)
+        shortened_img_path = os.path.join(root[length:], file_name)
+        if any(ext in shortened_img_path.lower() for ext in img_types):
+          if shortened_img_path != 0:
+            try:
+              upload = client.put_object(
+                        ACL=args.acl,
+                        Body=open(absolute_img_path, 'rb').read(),
+                        Bucket=bucket,
+                        Key=shortened_img_path
+                      )
+              print("Uploading file %s" % shortened_img_path)
+            except ClientError as error:
+              print(error.response)
+  else:
+    print("please use one of the following: 'private', 'public-read', 'public-read-write', 'authenticated-read', 'aws-exec-read', 'bucket-owner-read', 'bucket-owner-full-control'")
 
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):
