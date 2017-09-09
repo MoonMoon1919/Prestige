@@ -13,13 +13,16 @@ Commands:<br>
 prestige --upload(required) --bucket(required) $your-bucket-name --acl $acl_of_choice --optimize(optional) $integer<br>
 <br>
 For example:<br>
-prestige --upload --bucket max-test-bucket --acl private --optimize 85 <i>this optimizes my photos to 85% quality then uploads to the bucket 'max-test-bucket' with a 'private' acl</i><br>
-prestige --upload --bucket --acl public-read max-test-bucket <i>this uploads all photos in my current directory to the bucket 'max-test-bucket' with the 'public-read' acl</i><br>
+prestige --upload --bucket max-test-bucket --acl private --optimize 85<br>
+<i>this optimizes my photos to 85% quality then uploads to the bucket 'max-test-bucket' with a 'private' acl</i><br>
+<br>
+prestige --upload --bucket max-test-bucket --acl public-read<br>
+<i>this uploads all photos in my current directory to the bucket 'max-test-bucket' with the 'public-read' acl</i><br>
 <br>
 <b>NOTE: USING '--optimize- REMOVES FILES AUTOMATICALLY!!!!!<br>
 IF YOU VALUE YOUR ORIGINAL 100% QUALITY PHOTOS, COPY THE ONES YOU WANT TO UPLOAD & OPTIMIZE TO A DIFFERENT DIRECTORY</b><br>
 <br>
-After prestige runs it will return a list of URLs where you images can be found<br>
+After prestige runs it will return a list of URLs where you images can be found in S3<br>
 <br>
 Current accepted formats:<br>
 -jpg/jpeg<br>
@@ -33,3 +36,6 @@ Current accepted ACLs:<br>
 -aws-exec-read<br>
 -bucket-owner-read<br>
 -bucket-owner-full-control<br>
+<br>
+<b>Roadmap</b><br>
+-Add Cloudfront integration<br>
