@@ -5,6 +5,7 @@ import json
 import zipfile
 import os
 import datetime
+from PIL import Image
 from botocore.exceptions import ClientError
 
 #Get internal libraries
@@ -18,6 +19,42 @@ client = boto3.client('s3')
 my_session = boto3.session.Session()
 region = my_session.region_name
 
+def optimize():
+  current_dir = os.curdir
+  walker = os.walk(current_dir)
+  length = len(current_dir)
+
+  for root, folders, files in walker:
+    for file_name in files:
+      absolute_img_path = os.path.join(root, file_name)
+      shortened_img_path = os.path.join(root[length:], file_name)
+      if any(ext in shortened_img_path.lower() for ext in img_types):
+        if shortened_img_path != 0:
+          f, e = os.path.splitext(shortened_img_path)
+          outfile = f + "_optimized.jpg"
+          try:
+            print("Attempting to optimize '%s'" % shortened_img_path)
+            img = Image.open(shortened_img_path)
+            img.save(outfile,optimize=True,quality=85)
+
+            print("Comparing file sizes")
+            old_img = os.path.getsize(shortened_img_path)
+            nu_img = os.path.getsize(outfile)
+            if old_img >= nu_img:
+              try:
+                os.remove(shortened_img_path)
+                print("Optimized image is smaller, removing old image")
+              except IOError:
+                print("Could not delete file")
+            else:
+              try:
+                os.remove(outfile)
+                print("Original image is smaller, removing optimized image")
+              except IOError:
+                print("Couldn't open file")
+          except IOError:
+            print("IOError")
+
 def upload_files():
   bucket = args.bucket
   current_dir = os.curdir
@@ -28,12 +65,12 @@ def upload_files():
     for file_name in files:
       absolute_img_path = os.path.join(root, file_name)
       shortened_img_path = os.path.join(root[length:], file_name)
-      if any(ext in shortened_img_path for ext in img_types):
+      if any(ext in shortened_img_path.lower() for ext in img_types):
         if shortened_img_path != 0:
           for images in shortened_img_path:
             try:
               upload = client.put_object(
-                        ACL='private',
+                        ACL='public-read',
                         Body=open(absolute_img_path, 'rb').read(),
                         Bucket=bucket,
                         Key=shortened_img_path
@@ -103,13 +140,10 @@ def get_urls():
   for item in images:
     print("'%s' url: https://s3-%s.amazonaws.com/%s/%s" % (item, region, bucket, item.replace(" ", "+")))
 
-def photo_optim():
-  print("Im optimizing photos!")
-
 def main():
   if args.upload:
     if args.optimize:
-      photo_optim()
+      optimize()
       upload_files()
       if check_upload():
         get_urls()
