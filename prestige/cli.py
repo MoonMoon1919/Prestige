@@ -6,8 +6,8 @@ parser.add_argument(
   action='store_true',
   )
 parser.add_argument(
-  '-o', '--optimize', 
-  action='store_true', 
+  '-o', '--optimize',
+  type=int 
   )
 parser.add_argument(
   '-b', '--bucket',  

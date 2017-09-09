@@ -20,40 +20,46 @@ my_session = boto3.session.Session()
 region = my_session.region_name
 
 def optimize():
-  current_dir = os.curdir
-  walker = os.walk(current_dir)
-  length = len(current_dir)
+  ranger = range(1,100)
+  if args.optimize in ranger:
 
-  for root, folders, files in walker:
-    for file_name in files:
-      absolute_img_path = os.path.join(root, file_name)
-      shortened_img_path = os.path.join(root[length:], file_name)
-      if any(ext in shortened_img_path.lower() for ext in img_types):
-        if shortened_img_path != 0:
-          f, e = os.path.splitext(shortened_img_path)
-          outfile = f + "_optimized.jpg"
-          try:
-            print("Attempting to optimize '%s'" % shortened_img_path)
-            img = Image.open(shortened_img_path)
-            img.save(outfile,optimize=True,quality=85)
+    current_dir = os.curdir
+    walker = os.walk(current_dir)
+    length = len(current_dir)
 
-            print("Comparing file sizes")
-            old_img = os.path.getsize(shortened_img_path)
-            nu_img = os.path.getsize(outfile)
-            if old_img >= nu_img:
-              try:
-                os.remove(shortened_img_path)
-                print("Optimized image is smaller, removing old image")
-              except IOError:
-                print("Could not delete file")
-            else:
-              try:
-                os.remove(outfile)
-                print("Original image is smaller, removing optimized image")
-              except IOError:
-                print("Couldn't open file")
-          except IOError:
-            print("IOError")
+    for root, folders, files in walker:
+      for file_name in files:
+        absolute_img_path = os.path.join(root, file_name)
+        shortened_img_path = os.path.join(root[length:], file_name)
+        if any(ext in shortened_img_path.lower() for ext in img_types):
+          if shortened_img_path != 0:
+            f, e = os.path.splitext(shortened_img_path)
+            outfile = f + "_optimized.jpg"
+            try:
+              print("Attempting to optimize '%s'" % shortened_img_path)
+              img = Image.open(shortened_img_path)
+              img.save(outfile,optimize=True,quality=args.optimize)
+
+              print("Comparing file sizes")
+              old_img = os.path.getsize(shortened_img_path)
+              nu_img = os.path.getsize(outfile)
+              if old_img >= nu_img:
+                try:
+                  os.remove(shortened_img_path)
+                  print("Optimized image is smaller, removing old image")
+                except IOError:
+                  print("Could not delete file")
+              else:
+                try:
+                  os.remove(outfile)
+                  print("Original image is smaller, removing optimized image")
+                except IOError:
+                  print("Couldn't open file")
+            except IOError:
+              print("IOError")
+
+  else:
+    print("Please use a number between 1 and 100")
 
 def upload_files():
   bucket = args.bucket
@@ -67,18 +73,16 @@ def upload_files():
       shortened_img_path = os.path.join(root[length:], file_name)
       if any(ext in shortened_img_path.lower() for ext in img_types):
         if shortened_img_path != 0:
-          for images in shortened_img_path:
-            try:
-              upload = client.put_object(
-                        ACL='public-read',
-                        Body=open(absolute_img_path, 'rb').read(),
-                        Bucket=bucket,
-                        Key=shortened_img_path
-                      )
-              for obj in upload:
-                print("Uploading file %s" % shortened_img_path)
-            except ClientError as error:
-              print(error.response)
+          try:
+            upload = client.put_object(
+                      ACL='public-read',
+                      Body=open(absolute_img_path, 'rb').read(),
+                      Bucket=bucket,
+                      Key=shortened_img_path
+                    )
+            print("Uploading file %s" % shortened_img_path)
+          except ClientError as error:
+            print(error.response)
 
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):
