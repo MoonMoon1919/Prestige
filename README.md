@@ -10,14 +10,14 @@ To install, clone the repo and run:<br>
 pip install .<br>
 <br>
 Commands:<br>
-prestige --upload(required) --bucket(required) $your-bucket-name --acl $acl_of_choice --optimize(optional) $integer<br>
+prestige --upload(required) --bucket(required) $your-bucket-name --acl(required) $acl_of_choice --optimize(optional) $integer<br>
 <br>
 For example:<br>
 prestige --upload --bucket max-test-bucket --acl private --optimize 85<br>
-<i>this optimizes my photos to 85% quality then uploads to the bucket 'max-test-bucket' with a 'private' acl</i><br>
+<i>this optimizes all photos in the directory to 85% quality then uploads to the bucket 'max-test-bucket' with a 'private' acl</i><br>
 <br>
 prestige --upload --bucket max-test-bucket --acl public-read<br>
-<i>this uploads all photos in my current directory to the bucket 'max-test-bucket' with the 'public-read' acl</i><br>
+<i>this uploads all photos in the current directory to the bucket 'max-test-bucket' with the 'public-read' acl</i><br>
 <br>
 <b>NOTE: USING '--optimize- REMOVES FILES AUTOMATICALLY!!!!!<br>
 IF YOU VALUE YOUR ORIGINAL 100% QUALITY PHOTOS, COPY THE ONES YOU WANT TO UPLOAD & OPTIMIZE TO A DIFFERENT DIRECTORY</b><br>
