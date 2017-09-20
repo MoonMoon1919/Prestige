@@ -39,3 +39,4 @@ Current accepted ACLs:<br>
 <br>
 <b>Roadmap</b><br>
 -Add Cloudfront integration<br>
+-Multiple directories in the "current working directory" (ie subdirectories in an "assets")<br>
