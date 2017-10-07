@@ -27,15 +27,16 @@ def optimize():
     current_dir = os.curdir
     walker = os.walk(current_dir)
     length = len(current_dir)
-
+    
     for root, folders, files in walker:
       for file_name in files:
         absolute_img_path = os.path.join(root, file_name)
-        shortened_img_path = os.path.join(root[length:], file_name)
+        shortened_img_path = os.path.join(root[length:], file_name) 
         if any(ext in shortened_img_path.lower() for ext in img_types):
           if shortened_img_path != 0:
             f, e = os.path.splitext(shortened_img_path)
             outfile = f + "_optimized.jpg"
+
             try:
               print("Attempting to optimize '%s'" % shortened_img_path)
               img = Image.open(shortened_img_path)
@@ -57,8 +58,8 @@ def optimize():
                 except IOError:
                   print("Couldn't open file")
             except IOError:
-              print("IOError")
-
+              print(IOError)
+            
   else:
     print("Please use a number between 1 and 100")
 
