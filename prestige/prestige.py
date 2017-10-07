@@ -5,6 +5,7 @@ import json
 import zipfile
 import os
 import datetime
+import pathlib
 from PIL import Image
 from botocore.exceptions import ClientError
 
@@ -34,20 +35,21 @@ def optimize():
         shortened_img_path = os.path.join(root[length:], file_name) 
         if any(ext in shortened_img_path.lower() for ext in img_types):
           if shortened_img_path != 0:
-            f, e = os.path.splitext(shortened_img_path)
+            f, e = os.path.splitext(absolute_img_path)
             outfile = f + "_optimized.jpg"
 
             try:
               print("Attempting to optimize '%s'" % shortened_img_path)
-              img = Image.open(shortened_img_path)
+              img = Image.open(absolute_img_path)
               img.save(outfile,optimize=True,quality=args.optimize)
-
+              
               print("Comparing file sizes")
-              old_img = os.path.getsize(shortened_img_path)
+              old_img = os.path.getsize(absolute_img_path)
               nu_img = os.path.getsize(outfile)
+              
               if old_img >= nu_img:
                 try:
-                  os.remove(shortened_img_path)
+                  os.remove(absolute_img_path)
                   print("Optimized image is smaller, removing old image")
                 except IOError:
                   print("Could not delete file")
@@ -57,8 +59,9 @@ def optimize():
                   print("Original image is smaller, removing optimized image")
                 except IOError:
                   print("Couldn't open file")
-            except IOError:
-              print(IOError)
+              
+            except IOError as e:
+              print(e)
             
   else:
     print("Please use a number between 1 and 100")
@@ -75,6 +78,7 @@ def upload_files():
       for file_name in files:
         absolute_img_path = os.path.join(root, file_name)
         shortened_img_path = os.path.join(root[length:], file_name)
+        no_slash_path = str(shortened_img_path.strip("/"))
         if any(ext in shortened_img_path.lower() for ext in img_types):
           if shortened_img_path != 0:
             try:
@@ -82,9 +86,9 @@ def upload_files():
                         ACL=args.acl,
                         Body=open(absolute_img_path, 'rb').read(),
                         Bucket=bucket,
-                        Key=shortened_img_path
+                        Key=no_slash_path
                       )
-              print("Uploading file %s" % shortened_img_path)
+              print("Uploading file %s" % no_slash_path)
             except ClientError as error:
               print(error.response)
   else:
@@ -107,7 +111,7 @@ def check_upload():
     for file_name in files:
       if file_name != 0:
         shortened_img_path = os.path.join(root[length:], file_name)
-        to_upload.append(shortened_img_path)
+        to_upload.append(shortened_img_path.strip("/"))
 
   current_objs = []
 
@@ -148,7 +152,8 @@ def get_urls():
         images.append(shortened_img_path)
         
   for item in images:
-    print("'%s' url: https://s3-%s.amazonaws.com/%s/%s" % (item, region, bucket, item.replace(" ", "+")))
+    no_slash = item.strip("/")
+    print("'%s' url: https://s3-%s.amazonaws.com/%s/%s" % (item, region, bucket, no_slash.replace(" ", "+")))
 
 def main():
   if args.upload:
