@@ -7,6 +7,7 @@ It has a built in optimize function that allows you to optimize your photos for 
 if you have a lot of images to upload, simply run "prestige --upload --bucket $your-bucket-name --acl $(see list)" while in the directory where you images are.<br>
 <br>
 To install, clone the repo and run:<br>
+pip install -r requirements.txt<br>
 pip install .<br>
 <br>
 Commands:<br>
