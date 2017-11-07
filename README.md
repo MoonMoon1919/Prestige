@@ -1,42 +1,67 @@
 # Prestige
 
-Copyright M.Moon/Perilune Inc 2017<br>
-<br>
-Prestige is a CLI tool for uploading images to AWS Simple Storage Service (S3).<br>
-It has a built in optimize function that allows you to optimize your photos for web (expressed as a percentage from 1 to 100)<br>
-if you have a lot of images to upload, simply run "prestige --upload --bucket $your-bucket-name --acl $(see list)" while in the directory where you images are.<br>
-<br>
-To install, clone the repo and run:<br>
-pip install -r requirements.txt<br>
-pip install .<br>
-<br>
-Commands:<br>
-prestige --upload(required) --bucket(required) $your-bucket-name --acl(required) $acl_of_choice --optimize(optional) $integer<br>
-<br>
-For example:<br>
-prestige --upload --bucket max-test-bucket --acl private --optimize 85<br>
-<i>this optimizes all photos in the directory to 85% quality then uploads to the bucket 'max-test-bucket' with a 'private' acl</i><br>
-<br>
-prestige --upload --bucket max-test-bucket --acl public-read<br>
-<i>this uploads all photos in the current directory to the bucket 'max-test-bucket' with the 'public-read' acl</i><br>
-<br>
-<b>NOTE: USING '--optimize- REMOVES FILES AUTOMATICALLY!!!!!<br>
-IF YOU VALUE YOUR ORIGINAL 100% QUALITY PHOTOS, COPY THE ONES YOU WANT TO UPLOAD & OPTIMIZE TO A DIFFERENT DIRECTORY</b><br>
-<br>
-After prestige runs it will return a list of URLs where you images can be found in S3<br>
-<br>
-Current accepted formats:<br>
--jpg/jpeg<br>
--png<br>
-<br>
-Current accepted ACLs:<br>
--private<br>
--public-read<br>
--public-read-write<br>
--authenticated-read<br>
--aws-exec-read<br>
--bucket-owner-read<br>
--bucket-owner-full-control<br>
-<br>
-<b>Roadmap</b><br>
--Add Cloudfront integration<br>
+![](http://images.amcnetworks.com/ifc.com/wp-content/uploads/2012/09/tumblr_m9zkssGhlV1rnw1mso2_500.gif)  
+
+Copyright M.Moon/Perilune Inc 2017  
+
+---
+
+## About
+
+- CLI tool for uploading images to AWS Simple Storage Service (S3)  
+- Built in optimize function that allows you to optimize your photos for web (expressed as a percentage from 1 to 100)  
+- Simply run "prestige --upload --bucket $your-bucket-name --acl $(see list)" while in the directory where you images are  
+
+---
+
+##  Installing  
+
+- clone the repo and run  
+- pip install -r requirements.txt  
+- pip install .  
+
+
+---
+
+## Commands  
+
+- --upload (required)
+- --bucket (required) (must include bucket name)
+- --acl (required) (include ACL of choice from list)
+- --optimize (optional) (optimizes images using Pillow) (must include integer for % of previous quality)
+
+---
+
+## Examples
+
+- prestige --upload(required) --bucket(required) $your-bucket-name --acl(required) $acl_of_choice --optimize(optional) $integer 
+- prestige --upload --bucket max-test-bucket --acl private --optimize 85  
+- prestige --upload --bucket max-test-bucket --acl public-read  
+
+
+NOTE: USING '--optimize- REMOVES FILES AUTOMATICALLY!!!!!  
+IF YOU VALUE YOUR ORIGINAL 100% QUALITY PHOTOS, COPY THE ONES YOU WANT TO UPLOAD & OPTIMIZE TO A DIFFERENT DIRECTORY  
+
+
+After prestige runs it will return a list of URLs where you images can be found in S3
+
+---  
+  
+## Current accepted formats   
+- jpg/jpeg  
+- png  
+  
+## Current accepted ACLs  
+- private  
+- public-read  
+- public-read-write  
+- authenticated-read  
+- aws-exec-read  
+- bucket-owner-read  
+- bucket-owner-full-control  
+
+---
+
+## Roadmap
+
+-Add Cloudfront integration  
