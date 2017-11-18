@@ -34,9 +34,9 @@ Copyright M.Moon/Perilune Inc 2017
 
 ## Examples
 
-- prestige --upload(required) --bucket(required) $your-bucket-name --acl(required) $acl_of_choice --optimize(optional) $integer 
-- prestige --upload --bucket max-test-bucket --acl private --optimize 85  
-- prestige --upload --bucket max-test-bucket --acl public-read  
+```prestige --upload(required) --bucket(required) $your-bucket-name --acl(required) $acl_of_choice --optimize(optional) $integer```   
+```prestige --upload --bucket max-test-bucket --acl private --optimize 85```  
+```prestige --upload --bucket max-test-bucket --acl public-read```  
 
 
 NOTE: USING '--optimize- REMOVES FILES AUTOMATICALLY!!!!!  
@@ -51,10 +51,7 @@ After prestige runs it will return a list of URLs where you images can be found 
 
 If you have the AWS CLI tool installed, run this command, if not, place your access and secret keys where the configure commands are
 
-- docker run --rm -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) \
-	-e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) \
-	-e AWS_DEFAULT_REGION=$YOURREGION -v `pwd`:/app moonmoon1919/prestige:0.1 \
-	--upload --bucket mm-img-bucket-test --acl private --optimize 85  
+```docker run --rm -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) -e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) -e AWS_DEFAULT_REGION=$YOURREGION -v `pwd`:/app moonmoon1919/prestige:0.1 --upload --bucket mm-img-bucket-test --acl private --optimize 85```  
 
 Using Docker allows you to put Prestige in a CICD pipeline and not have to worry about dependency management on a build agent.  
 
