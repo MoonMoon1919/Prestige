@@ -34,9 +34,9 @@ Copyright M.Moon/Perilune Inc 2017
 
 ## Examples
 
-```prestige --upload(required) --bucket(required) $your-bucket-name --acl(required) $acl_of_choice --optimize(optional) $integer```   
-```prestige --upload --bucket max-test-bucket --acl private --optimize 85```  
-```prestige --upload --bucket max-test-bucket --acl public-read```  
+- ```prestige --upload(required) --bucket(required) $your-bucket-name --acl(required) $acl_of_choice --optimize(optional) $integer```   
+- ```prestige --upload --bucket max-test-bucket --acl private --optimize 85```  
+- ```prestige --upload --bucket max-test-bucket --acl public-read```  
 
 
 NOTE: USING '--optimize- REMOVES FILES AUTOMATICALLY!!!!!  
