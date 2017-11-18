@@ -45,6 +45,19 @@ IF YOU VALUE YOUR ORIGINAL 100% QUALITY PHOTOS, COPY THE ONES YOU WANT TO UPLOAD
 
 After prestige runs it will return a list of URLs where you images can be found in S3
 
+---
+
+## Dockerfile how to:
+
+If you have the AWS CLI tool installed, run this command, if not, place your access and secret keys where the configure commands are
+
+- docker run --rm -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) \
+	-e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) \
+	-e AWS_DEFAULT_REGION=$YOURREGION -v `pwd`:/app moonmoon1919/prestige:0.1 \
+	--upload --bucket mm-img-bucket-test --acl private --optimize 85  
+
+Using Docker allows you to put Prestige in a CICD pipeline and not have to worry about dependency management on a build agent.  
+
 ---  
   
 ## Current accepted formats   
